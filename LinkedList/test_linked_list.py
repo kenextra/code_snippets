@@ -1,5 +1,4 @@
-from linked_list import LinkedList
-from linked_list import LLNode
+from linked_list import LinkedList, LLNode
 
 
 def main():
@@ -43,6 +42,11 @@ def main():
     for node in short_list:
         print(node.print_node())
     print(f"\nNumber of Nodes: {len(short_list)}")
+
+    dllst = LinkedList(['a', 'b', 'c'])
+    dllst.print_nodes()
+    dllst.print_list()
+    print(f"\nNumber of Nodes: {len(dllst)}")
 
 
 if __name__ == "__main__":

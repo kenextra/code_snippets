@@ -42,12 +42,25 @@ class LinkedList:
         tail of the linked list
     """
 
-    def __init__(self):
+    def __init__(self, nodes=None):
         self.size = 0
         self.head = LLNode()
         self.tail = LLNode()
-        self.head.next = self.tail
-        self.tail.prev = self.head
+        if nodes is None:
+            self.head.next = self.tail
+            self.tail.prev = self.head
+        else:
+            node = LLNode(data=nodes.pop(0))
+            self.head.next = node
+            self.size += 1
+            for elem in nodes:
+                node.next = LLNode(data=elem)
+                node.prev = self.tail.prev
+                self.tail.prev = node
+                node = node.next
+                self.size += 1
+            node.next = self.tail
+            self.tail.prev = node.next
 
     def __iter__(self):
         """Yields the next node in a linked list
