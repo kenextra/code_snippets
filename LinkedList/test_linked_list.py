@@ -48,6 +48,16 @@ def main():
     dllst.print_list()
     print(f"\nNumber of Nodes: {len(dllst)}")
 
+    dllst = LinkedList([LLNode('x'), LLNode('z'), LLNode('y')])
+    dllst.print_nodes()
+    dllst.print_list()
+    print(f"\nNumber of Nodes: {len(dllst)}")
+
+    dllst = LinkedList(['x', LLNode('y'), LLNode('z')])
+    dllst.print_nodes()
+    dllst.print_list()
+    print(f"\nNumber of Nodes: {len(dllst)}")
+
 
 if __name__ == "__main__":
     main()

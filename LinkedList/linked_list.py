@@ -50,11 +50,13 @@ class LinkedList:
             self.head.next = self.tail
             self.tail.prev = self.head
         else:
-            node = LLNode(data=nodes.pop(0))
+            data = nodes.pop(0)
+            node = data if isinstance(data, LLNode) else LLNode(data=data)
             self.head.next = node
             self.size += 1
             for elem in nodes:
-                node.next = LLNode(data=elem)
+                is_llnode = isinstance(elem, LLNode)
+                node.next = elem if is_llnode else LLNode(data=elem)
                 node.prev = self.tail.prev
                 self.tail.prev = node
                 node = node.next
