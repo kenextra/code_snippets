@@ -43,17 +43,17 @@ class LinkedList:
     """
 
     def __init__(self, nodes=None):
-        self.size = 0
         self.head = LLNode()
         self.tail = LLNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
         if nodes is None:
-            self.head.next = self.tail
-            self.tail.prev = self.head
+            self.size = 0
         else:
+            self.size = 1
             data = nodes.pop(0)
             node = data if isinstance(data, LLNode) else LLNode(data=data)
             self.head.next = node
-            self.size += 1
             for elem in nodes:
                 is_llnode = isinstance(elem, LLNode)
                 node.next = elem if is_llnode else LLNode(data=elem)
@@ -61,8 +61,8 @@ class LinkedList:
                 self.tail.prev = node
                 node = node.next
                 self.size += 1
+            self.tail.prev = node
             node.next = self.tail
-            self.tail.prev = node.next
 
     def __iter__(self):
         """Yields the next node in a linked list
