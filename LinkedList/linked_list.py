@@ -47,9 +47,7 @@ class LinkedList:
         self.tail = LLNode()
         self.head.next = self.tail
         self.tail.prev = self.head
-        if nodes is None:
-            self.size = 0
-        else:
+        if nodes:
             self.size = 1
             data = nodes.pop(0)
             node = data if isinstance(data, LLNode) else LLNode(data=data)
@@ -63,6 +61,8 @@ class LinkedList:
                 self.size += 1
             self.tail.prev = node
             node.next = self.tail
+        else:
+            self.size = 0
 
     def __iter__(self):
         """Yields the next node in a linked list
@@ -113,7 +113,15 @@ class LinkedList:
         ----------
         node : [Any, LLNode]
             Node or element to be added
+
+        Raises
+        ------
+        TypeError
+            if element is NoneType
         """
+        if node is None or not node:
+            raise TypeError
+
         first_node = self.head.next
         if not first_node.next:  # if it is linkedlist tail
             self.add(node)
@@ -144,7 +152,7 @@ class LinkedList:
         TypeError
             if element is NoneType
         """
-        if data is None:
+        if data is None or not data:
             raise TypeError
         if isinstance(data, LLNode):
             node = data
@@ -158,7 +166,7 @@ class LinkedList:
 
         return True
 
-    def add_after(self, target_node_data, new_node):
+    def add_after(self, target_node, new_node):
         """Add a new node after the given target node data
 
         Parameters
@@ -171,16 +179,26 @@ class LinkedList:
         Raises
         ------
         Exception
-            if list is empty or node with data not found
+            if list is empty or node with target_data not found
+        TypeError
+            if target_node or new_node is NoneType
         """
         node = self.head.next
         if not node.next:  # if it is linkedlist tail
             raise Exception("List is empty")
 
+        if target_node is None or new_node is None or not target_node or not new_node:
+            raise TypeError
+
+        target_node_data = target_node.data if isinstance(
+            target_node, LLNode) else target_node
+
         tail_prev = self.tail.prev
         if tail_prev.data == target_node_data:
             return self.add(new_node)
 
+        new_node = new_node if isinstance(
+            new_node, LLNode) else LLNode(new_node)
         for node in self:
             if node.data == target_node_data:
                 new_node.next = node.next
@@ -190,9 +208,9 @@ class LinkedList:
                 self.size += 1
                 return
 
-        raise Exception(f"Node with data '{target_node_data}' not found")
+        raise Exception(f"Node with data {target_node_data} not found")
 
-    def add_before(self, target_node_data, new_node):
+    def add_before(self, target_node, new_node):
         """Add a new node before the given target node data
 
         Parameters
@@ -206,15 +224,24 @@ class LinkedList:
         ------
         Exception
             if list is empty or node with data not found
+        TypeError
+            if target_node_data or new_node is NoneType
         """
         first_node = self.head.next
         if not first_node.next:  # if it is linkedlist tail
             raise Exception("List is empty")
 
-        if first_node.data == target_node_data:
-            self.add_first(new_node)
-            return
+        if target_node is None or new_node is None or not target_node or not new_node:
+            raise TypeError
 
+        target_node_data = target_node.data if isinstance(
+            target_node, LLNode) else target_node
+
+        if first_node.data == target_node_data:
+            return self.add_first(new_node)
+
+        new_node = new_node if isinstance(
+            new_node, LLNode) else LLNode(new_node)
         prev_node = self.head.next  # first_node
         for node in self:
             if node.data == target_node_data:
@@ -226,24 +253,26 @@ class LinkedList:
                 return
             prev_node = node
 
-        raise Exception(f"Node with data '{target_node_data}' not found")
+        raise Exception(f"Node with data {target_node_data} not found")
 
     def remove_node(self, target_node_data):
-        if not self.head:
+        if self.head.next == self.tail:
             raise Exception("List is empty")
 
         if self.head.data == target_node_data:
             self.head = self.head.next
+            self.size -= 1
             return
 
         previous_node = self.head
         for node in self:
             if node.data == target_node_data:
                 previous_node.next = node.next
+                self.size -= 1
                 return
             previous_node = node
 
-        raise Exception(f"Node with data '{target_node_data}' not found")
+        raise Exception(f"Node with data {target_node_data} not found")
 
     def get(self, index):
         """Get the data at position index
@@ -269,7 +298,7 @@ class LinkedList:
         if not node.next:  # if it is linkedlist tail
             raise Exception("List is empty")
 
-        if index < 0 or index > self.size:
+        if index < 0 or index >= self.size:
             raise IndexError
 
         count = 0
@@ -294,9 +323,13 @@ class LinkedList:
         ------
         IndexError
             if the index is out of bounds
+        TypeError
+            if data is NoneType or empty collection
         """
         if (index < 0 or index > self.size) and (index != 0 or self.size != 0):
             raise IndexError
+        if not data:
+            raise TypeError
         if index == 0:
             self.add_first(data)
             return
@@ -310,8 +343,8 @@ class LinkedList:
             count -= 1
         node.data = data
 
-    def remove(self, index):
-        """Remove a node at the specified index and return its data elemet
+    def remove_at(self, index):
+        """Remove a node at the specified index and return its data element
 
         Parameters
         ----------
@@ -328,11 +361,18 @@ class LinkedList:
         IndexError
             if index is out of bounds of list
         """
-        node = self.head.next
-        count = 0
-
         if index < 0 or index >= self.size:
             raise IndexError
+
+        node = self.head.next
+
+        if node.next == self.tail:
+            self.head.next = self.tail
+            self.tail.prev = self.head
+            self.size -= 1
+            return node.data
+
+        count = 0
         while node != self.tail:
             if count == index:
                 data = node.data
@@ -362,12 +402,17 @@ class LinkedList:
         ------
         IndexError
             if the index is out of bounds
+        TypeError
+            if data is NoneType or empty collection
         """
         node = self.head.next
         count = 0
 
         if index < 0 or index >= self.size:
             raise IndexError
+
+        if not data:
+            raise TypeError
 
         while node != self.tail:
             if count == index:

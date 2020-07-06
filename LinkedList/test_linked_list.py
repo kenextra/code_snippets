@@ -20,7 +20,7 @@ def main():
     print(short_list.get(5))
     short_list.add_at(6, {'name': 'ken', 'type': 'IBO'})
     short_list.print_list()
-    print("Removed: ", short_list.remove(6))
+    print("Removed: ", short_list.remove_at(6))
     short_list.print_list()
     short_list.set_data(5, {'name': 'kene', 'type': 'IBO'})
     short_list.print_list()
@@ -65,6 +65,11 @@ def main():
     dllst.print_nodes()
     dllst.print_list()
     print(f"\nNumber of Nodes: {len(dllst)}")
+
+    dllst = LinkedList(['x'])
+    dllst.remove_at(0)
+    dllst.print_list()
+    print(len(dllst))
 
 
 if __name__ == "__main__":
