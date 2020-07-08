@@ -119,7 +119,7 @@ class LinkedList:
         TypeError
             if element is NoneType
         """
-        if node is None or not node:
+        if not node:
             raise TypeError
 
         first_node = self.head.next
@@ -152,7 +152,7 @@ class LinkedList:
         TypeError
             if element is NoneType
         """
-        if data is None or not data:
+        if not data:
             raise TypeError
         if isinstance(data, LLNode):
             node = data
@@ -187,7 +187,7 @@ class LinkedList:
         if not node.next:  # if it is linkedlist tail
             raise Exception("List is empty")
 
-        if target_node is None or new_node is None or not target_node or not new_node:
+        if not target_node or not new_node:
             raise TypeError
 
         target_node_data = target_node.data if isinstance(
@@ -215,7 +215,7 @@ class LinkedList:
 
         Parameters
         ----------
-        target_node_data : Any
+        target_node : Any
             Data of the target node
         new_node : LLNode
             The new node or element to be added
@@ -225,13 +225,13 @@ class LinkedList:
         Exception
             if list is empty or node with data not found
         TypeError
-            if target_node_data or new_node is NoneType
+            if target_node or new_node is NoneType
         """
         first_node = self.head.next
         if not first_node.next:  # if it is linkedlist tail
             raise Exception("List is empty")
 
-        if target_node is None or new_node is None or not target_node or not new_node:
+        if not target_node or not new_node:
             raise TypeError
 
         target_node_data = target_node.data if isinstance(
@@ -256,6 +256,18 @@ class LinkedList:
         raise Exception(f"Node with data {target_node_data} not found")
 
     def remove_node(self, target_node_data):
+        """Remove a node with the specified data
+
+        Parameters
+        ----------
+        target_node_data : Any
+            The target node data to be removed
+
+        Raises
+        ------
+        Exception
+            if the list is empty or node with specified data not found
+        """
         if self.head.next == self.tail:
             raise Exception("List is empty")
 
